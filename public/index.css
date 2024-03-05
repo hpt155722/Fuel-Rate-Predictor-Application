@@ -1,0 +1,12 @@
+h5{
+    font-style: italic;
+}
+form{
+    text-align: center;
+    background-color: #d2eaff;
+    border-style: outset;
+    border-width: 5px;
+    border-radius: 20px;
+    width: 450px;
+    margin: 190px auto;
+}

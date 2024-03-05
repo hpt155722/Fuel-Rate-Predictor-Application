@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Quote Form</title>
+    <link rel="stylesheet" href="fuelquoteform.css">
+</head>
+<body>
+    <h2>Fuel Quote Form</h2>
+    <form id="fuelQuoteForm">
+        <label for="gallonsRequested">Gallons Requested:</label><br>
+        <input type="number" id="gallonsRequested" name="gallonsRequested" required><br><br>
+
+        <label for="deliveryAddress">Delivery Address:</label><br>
+        <input type="text" id="deliveryAddress" name="deliveryAddress" value="123 Main St, City, State" readonly><br><br>
+
+        <label for="deliveryDate">Delivery Date:</label><br>
+        <input type="date" id="deliveryDate" name="deliveryDate" required><br><br>
+
+        <label for="suggestedPrice">Suggested Price / gallon:</label><br>
+        <input type="number" id="suggestedPrice" name="suggestedPrice" readonly placeholder="Price per gallon"><br><br>
+
+        <label for="totalAmountDue">Total Amount Due:</label><br>
+        <input type="number" id="totalAmountDue" name="totalAmountDue" readonly placeholder="Total amount"><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+    <!--
+    <table>
+        <tr>
+            <th>Header 1</th>
+            <th>Header 2</th>
+            <th>Header 3</th>
+        </tr>
+        <tr>
+            <td>Data 1</td>
+            <td>Data 2</td>
+            <td>Data 3</td>
+        </tr>
+        <tr>
+            <td>Data 4</td>
+            <td>Data 5</td>
+            <td>Data 6</td>
+        </tr>
+    </table>
+    
+    <div class="horContainer">
+        <div>Item 1</div>
+        <div>Item 2</div>
+        <div>Item 3</div>
+    </div>
+-->
+</body>
+</html>
