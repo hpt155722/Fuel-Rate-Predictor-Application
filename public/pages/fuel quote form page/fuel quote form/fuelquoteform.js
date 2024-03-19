@@ -1,11 +1,24 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('fuelQuoteForm');
-
-    form.addEventListener('submit', function(event) {
+$(document).ready(function() {
+    // Function to fetch fuel quote history using AJAX
+    function fetchFuelQuoteForm() {
+        $.ajax({
+            url: '/fuelquoteform', 
+            type: 'GET',
+            success: function(data) {
+                data.forEach(function(quote) {
+                    var row = '<tr><td>' + quote.date + '</td><td>' + quote.gallonsRequested + '</td><td>' + quote.suggestedPrice + '</td><td>' + quote.totalAmountDue + '</td></tr>';
+                    $('#fuelQuoteTableBody').append(row);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching fuel quote history:', error);
+            }
+        });
+    }
+    fetchFuelQuoteForm();
+    // Add submit event listener to the form
+    $('#fuelQuoteForm').submit(function(event) {
         event.preventDefault(); 
-        const gallonsRequested = parseFloat(document.getElementById('gallonsRequested').value);
-        const suggestedPrice = parseFloat(document.getElementById('suggestedPrice').value);
-        const totalAmountDue = gallonsRequested * suggestedPrice;
-        document.getElementById('totalAmountDue').value = totalAmountDue.toFixed(2);
+        // Your form submission logic goes here
     });
 });

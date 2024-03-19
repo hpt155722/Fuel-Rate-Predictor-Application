@@ -9,21 +9,19 @@
     <meta name="autor" content="Yucheng Guo, Jinn Ha, Jonathon Machen, Yu-Mei Hung">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
-    <scrip src="index.js" type="module"></scrip>
-
 </head>
 
 <body>
-        <form action="pages/home page/home.html" method="post">
+        <form action="/login" method="post">
             <h3><bold>Login</bold></h3>
             <div>
-                <label for="userName">Username:</label>
-                <input type="text" id="userName" name="userName" required>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" class= "username" required>
             </div>
             <br>
             <div>
-                <laber for="pass">Password:</laber>
-                <input type="password" id="pass" name="pass" required>
+                <laber for="password">Password:</laber>
+                <input type="password" id="password" name="password" class= "password" required>
             </div>
             <br>
             <div>
@@ -34,6 +32,7 @@
                     Create an account now!</a></h5>
             </div> 
         </form>
+        <script src="index.js"></script>
 </body>
   
 </html>

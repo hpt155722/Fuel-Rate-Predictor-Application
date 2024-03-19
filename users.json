@@ -1,0 +1,22 @@
+[
+    {
+        "username": "john_doe",
+        "password": "password123",
+        "fullName": "John Doe",
+        "address1": "123 Example Address blah blah St",
+        "address2": "Apt 101",
+        "city": "Katy",
+        "state": "TX",
+        "zipcode": "12345"
+    },
+    {
+        "username": "jane_smith",
+        "password": "ilovecookies",
+        "fullName": "Jane Smith",
+        "address1": "248 Example address blah blah St",
+        "address2": "",
+        "city": "Houston",
+        "state": "TX",
+        "zipcode": "77034"
+    }
+]

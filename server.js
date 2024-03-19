@@ -2,12 +2,10 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const PORT = 5500;
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
-//When a client makes a GET request to this endpoint, the server will read the contents of the 'fuelquotehistory.json' file
-//Uses the fs.readFile() function
-//If an error occurs during reading, it will send a 500 status code and an error message
-//Otherwise, it parses the JSON data read from the file and sends it back to the client as a JSON response
-
+//Access fuel quote history JSON file
 app.get('/fuelquotehistory', (req, res) => {
     console.log('Received request to /fuelquotehistory endpoint');
     fs.readFile('fuelquotehistory.json', 'utf8', (err, data) => {
@@ -18,6 +16,43 @@ app.get('/fuelquotehistory', (req, res) => {
         }
         const fuelQuotes = JSON.parse(data);
         res.json(fuelQuotes);
+    });
+});
+
+// POST endpoint for initial registration
+app.post('/initial_register', (req, res) => {
+    // Get username and password
+    const { username, password } = req.body;
+
+    // Read existing users from the JSON file
+    let users = [];
+    try {
+        const usersData = fs.readFileSync('users.json', 'utf8');
+        users = JSON.parse(usersData);
+    } catch (error) {
+        console.error('Error reading users file:', error);
+    }
+
+
+    // Check if username already exists
+    const existingUser = users.find(user => user.username === username);
+    if (existingUser) {
+        return res.status(400).json({ success: false, message: 'Username already exists' });
+    }
+
+    // Create a new user object
+    const newUser = { username, password };
+    // Add the new user to the existing users array
+    users.push(newUser);
+
+    // Write the updated users array to user.JSON
+    fs.writeFile('users.json', JSON.stringify(users, null, 4), (err) => {
+        if (err) {
+            console.error('Error writing to users file:', err);
+            return res.status(500).json({ success: false, message: 'Internal server error' });
+        }
+        console.log('User registered and saved to users file:', newUser);
+        res.json({ success: true });
     });
 });
 
