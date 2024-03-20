@@ -4,9 +4,16 @@ $(document).ready(function() {
         url: '/fuelquotehistory',
         type: 'GET',
         success: function(data) {
-            console.log('Received data:', data);
-            // Iterate through the fetched data and append rows to the table
-            data.forEach(function(quote) {
+            // Retrieve the logged-in user from session storage
+            const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
+            
+            // Filter the data based on the logged-in user's username
+            const filteredData = data.filter(function(quote) {
+                return quote.username === loggedInUser.username;
+            });
+            
+            // Iterate through the filtered data and append rows to the table
+            filteredData.forEach(function(quote) {
                 console.log('Processing quote:', quote);
                 $('#fuelQuoteTable tbody').append(
                     `<tr>

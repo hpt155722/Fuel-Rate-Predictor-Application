@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     fuelQuoteButton.addEventListener('click', function() {
-        window.location.href = '../fuel quote form page/fuel quote form/fuelquoteform.html';
+        window.location.href = '../fuel quote form page/fuel quote history/fuelquotehistory.html';
     });
+
+    fuelQuotePageButton.addEventListener('click', function() {
+        window.location.href = '../fuel quote form page/fuel quote form/fuelquoteform.html'
+    })
 });

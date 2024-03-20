@@ -1,5 +1,6 @@
 [
     {
+        "username": "john_doe",
         "gallonsRequested": 100,
         "deliveryAddress": "123 Main St, Anytown, USA",
         "deliveryDate": "2024-03-05",
@@ -7,6 +8,7 @@
         "totalAmountDue": 250.00
     },
     {
+        "username": "john_doe",
         "gallonsRequested": 150,
         "deliveryAddress": "456 Elm St, Another Town, USA",
         "deliveryDate": "2024-02-20",
@@ -14,6 +16,7 @@
         "totalAmountDue": 367.50
     },
     {
+        "username": "john_doe",
         "gallonsRequested": 200,
         "deliveryAddress": "789 Oak St, Somewhere City, USA",
         "deliveryDate": "2024-02-10",

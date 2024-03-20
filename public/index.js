@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                sessionStorage.setItem('loggedInUser', JSON.stringify(data.user));
+
+                // redirect to the home page
                 window.location.href = '/pages/home page/home.html';
             } else {
                 console.error('Login failed:', data.message);
