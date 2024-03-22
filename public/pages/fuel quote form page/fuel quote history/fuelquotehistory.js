@@ -1,33 +1,39 @@
-$(document).ready(function() {
-    // Fetch data from JSON database using AJAX
-    $.ajax({
-        url: '/fuelquotehistory',
-        type: 'GET',
-        success: function(data) {
+function fetchFuelQuoteHistory() {
+    // Fetch data from JSON database using fetch API
+    return fetch('/fuelquotehistory')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
             // Retrieve the logged-in user from session storage
             const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-            
+
             // Filter the data based on the logged-in user's username
             const filteredData = data.filter(function(quote) {
                 return quote.username === loggedInUser.username;
             });
-            
-            // Iterate through the filtered data and append rows to the table
-            filteredData.forEach(function(quote) {
-                console.log('Processing quote:', quote);
-                $('#fuelQuoteTable tbody').append(
-                    `<tr>
-                        <td>${quote.gallonsRequested}</td>
-                        <td>${quote.deliveryAddress}</td>
-                        <td>${quote.deliveryDate}</td>
-                        <td>${quote.suggestedPricePerGallon}</td>
-                        <td>${quote.totalAmountDue}</td>
-                    </tr>`
-                );
-            });
-        },
-        error: function(xhr, status, error) {
+
+            // Return the filtered data
+            return filteredData;
+        })
+        .catch(error => {
             console.error('Error fetching data:', error);
-        }
+            // Return an empty array in case of error
+            return [];
+        });
+}
+
+// Call the function and handle the returned Promise
+fetchFuelQuoteHistory()
+    .then(filteredData => {
+        console.log(filteredData);
+        // Do something with filteredData here
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
-});
+
+module.exports = fetchFuelQuoteHistory;

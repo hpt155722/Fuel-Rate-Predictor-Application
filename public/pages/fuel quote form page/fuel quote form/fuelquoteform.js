@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Fill delivery address with user info
     function getUserInfoFromSession() {
         const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-        return loggedInUser || registeredUser;
+        return loggedInUser;
     }
 
     function populateFormWithUserInfo(user) {
@@ -13,36 +14,21 @@ document.addEventListener('DOMContentLoaded', function() {
         populateFormWithUserInfo(userInfo);
     }
 
-    const registrationForm = document.querySelector('form');
-
-    registrationForm.addEventListener('submit', function(event) {
+    // Form submission
+    document.getElementById('fuelQuoteForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-
+        // Gather form data
         const formData = {
-            username: username,
-            password: password
+            username: userInfo.username,
+            gallonsRequested: parseFloat(document.getElementById('gallonsRequested').value),
+            deliveryAddress: document.getElementById('deliveryAddress').value,
+            deliveryDate: document.getElementById('deliveryDate').value,
+            suggestedPricePerGallon: parseFloat(document.getElementById('suggestedPrice').value),
+            totalAmountDue: parseFloat(document.getElementById('totalAmountDue').value)
         };
 
-        fetch('/initial_register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                window.location.href = '/login.html';
-            } else {
-                console.error('Registration failed:', data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        // Append form data to fuelquotehistory.json here 
     });
+
 });
