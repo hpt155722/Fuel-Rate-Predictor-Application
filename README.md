@@ -1,6 +1,6 @@
 # Fuel Rate Predictor Application
 
-[CURRENTLY IN PROGRESS] <br>
+[PRIOJECT CURRENTLY IN PROGRESS] <br> <br> <br>
 A software application designed to predict fuel rates based on various criteria such as client location, history, gallons requested, and company profit margin.
 
 <br>
