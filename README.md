@@ -28,17 +28,13 @@ A software application designed to predict fuel rates based on various criteria 
 ☆ The project includes 80% code coverage.Tests are conducted using Jest.
 <br> <br>
  
- <!---    
 ### ☆ ───── Screenshots ───── ☆
 
  <br>
 
  <div>
-    <img style = "width: 30vw; margin: 2em;" src = "thumbnails/login.png">
-    <img style = "width: 30vw; margin: 2em;" src = "thumbnails/account.png">
-    <img style = "width: 30vw; margin: 2em;" src = "thumbnails/reports.png">
-    <img style = "width: 30vw; margin: 2em;" src = "thumbnails/management.png">
+    <img style = "width: 30vw; margin: 2em;" src = "thumbnails/fuelquoteform.png">
+    <img style = "width: 30vw; margin: 2em;" src = "thumbnails/fuelquotehistory.png">
 
 </div>
  <br>
-            -->
