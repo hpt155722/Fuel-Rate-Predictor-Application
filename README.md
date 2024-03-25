@@ -11,7 +11,7 @@ A software application designed to predict fuel rates based on various criteria 
 ☆ HTML <br>
 ☆ CSS <br>
 ☆ Javascript <br>
-☆ Node.js Express <br>
+☆ Node.js <br>
 ☆ JSON <br>
 
 <br>
