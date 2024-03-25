@@ -1,40 +1,62 @@
 function prepareData() {
     // Validate the data on the backend
-    let fullName = document.getElementById("name").value;
-    if (fullName.length > 50 || fullName.length == 0) {
+    const fullNameInput = document.getElementById("name").value;
+    if (fullNameInput.length > 50 || fullNameInput.length == 0) {
         alert("Invalid Name field. Please try again.");
         return false;
     }
-    let address1 = document.getElementById("address1").value;
-    if (address1.length > 100 || address1.length == 0) {
+    const address1Input = document.getElementById("address1").value;
+    if (address1Input.length > 100 || address1Input.length == 0) {
         alert("Invalid Address 1 field. Please try again.");
         return false;
     }
-    let address2 = document.getElementById("address2").value;
-    if (address2.length > 100) {
+    const address2Input = document.getElementById("address2").value;
+    if (address2Input.length > 100) {
         alert("Invalid Address 2 field. Please try again.");
         return false;
     }
-    let city = document.getElementById("city").value;
-    if (city.length > 100 || city.length == 0) {
+    const cityInput = document.getElementById("city").value;
+    if (cityInput.length > 100 || cityInput.length == 0) {
         alert("Invalid City field. Please try again.");
         return false;
     }
-    let state = document.getElementById("state").value;
-    let zipCode = document.getElementById("zip_code").value;
-    if (!/^\d*$/.test(parseInt(zipCode)) || zipCode.length < 5 || zipCode.length > 9) {
+    const stateInput = document.getElementById("state").value;
+    const zipCodeInput = document.getElementById("zip_code").value;
+    if (!/^\d*$/.test(parseInt(zipCodeInput)) || zipCodeInput.length < 5 || zipCodeInput.length > 9) {
         alert("Please enter a valid Zip Code");
         return false;
     }
     
     // Data to be sent to the server if all validation passes
-    var data = {
-        "Full Name": fullName,
-        "Address 1": address1,
-        "Address 2": address2,
-        "City": city,
-        "State": state,
-        "Zip Code": zipCode
+    const currentUser = JSON.parse(sessionStorage.getItem('registeredUser'));
+    const username = currentUser.username;
+    const userData = {
+        username: username,
+        password: currentUser.password,
+        fullName: fullNameInput,
+        address1: address1Input,
+        address2: address2Input,
+        city: cityInput,
+        state: stateInput,
+        zipcode: zipCodeInput
     };
-    const dataJSON = JSON.stringify(data);
+    fetch('/registration', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = '/index.html';
+        }
+        else {
+            console.error('Registration failed: ', data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error: ", error);
+    });
 }

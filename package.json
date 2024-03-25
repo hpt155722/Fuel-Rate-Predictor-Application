@@ -13,6 +13,8 @@
     "test": "jest"
   },
   "jest": {
-    "setupFiles": ["./source/setup-jest.js"]
+    "setupFiles": [
+      "./source/setup-jest.js"
+    ]
   }
 }

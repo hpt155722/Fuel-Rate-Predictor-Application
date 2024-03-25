@@ -1,5 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
     const registrationForm = document.querySelector('form');
+    const errorMessage = document.getElementById('error-message');
+
+    let eye = document.getElementById('eye');
+    let pass = document.getElementById('password');
+
+    eye.onclick = function(){
+        if(pass.type == 'password'){
+            pass.type = 'text';
+            eye.classList.remove('fa-regular', 'fa-eye-slash');
+            eye.classList.add('fa-regular', 'fa-eye');
+        }else{
+            pass.type = 'password';
+            eye.classList.remove('fa-regular', 'fa-eye');
+            eye.classList.add('fa-regular', 'fa-eye-slash');
+        }
+    }
 
     registrationForm.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -26,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sessionStorage.setItem('registeredUser', JSON.stringify(formData));
                 window.location.href = '/pages/profile page/registration/registration.html';
             } else {
-                console.error('Registration failed:', data.message);
+                errorMessage.textContent = data.message;
             }
         })
         .catch(error => {

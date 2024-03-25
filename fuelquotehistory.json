@@ -3,7 +3,7 @@
         "username": "john_doe",
         "gallonsRequested": 100,
         "deliveryAddress": "123 Main St, Anytown, USA",
-        "deliveryDate": "2024-03-05",
+        "deliveryDate": "03-05-2024",
         "suggestedPricePerGallon": 2.50,
         "totalAmountDue": 250.00
     },
@@ -11,7 +11,7 @@
         "username": "john_doe",
         "gallonsRequested": 150,
         "deliveryAddress": "456 Elm St, Another Town, USA",
-        "deliveryDate": "2024-02-20",
+        "deliveryDate": "02-20-2024",
         "suggestedPricePerGallon": 2.45,
         "totalAmountDue": 367.50
     },
@@ -19,7 +19,7 @@
         "username": "john_doe",
         "gallonsRequested": 200,
         "deliveryAddress": "789 Oak St, Somewhere City, USA",
-        "deliveryDate": "2024-02-10",
+        "deliveryDate": "02-10-2024",
         "suggestedPricePerGallon": 2.55,
         "totalAmountDue": 510.00
     }

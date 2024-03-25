@@ -26,11 +26,28 @@ function fetchFuelQuoteHistory() {
         });
 }
 
+function populateTable(data) {
+    const tableBody = document.querySelector('#fuelQuoteTable tbody');
+    tableBody.innerHTML = ''; // Clear previous data
+
+    data.forEach(quote => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${quote.gallonsRequested}</td>
+            <td>${quote.deliveryAddress}</td>
+            <td>${quote.deliveryDate}</td>
+            <td>${quote.suggestedPricePerGallon}</td>
+            <td>$${quote.totalAmountDue}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
 // Call the function and handle the returned Promise
 fetchFuelQuoteHistory()
     .then(filteredData => {
         console.log(filteredData);
-        // Do something with filteredData here
+        populateTable(filteredData);
     })
     .catch(error => {
         console.error('Error:', error);

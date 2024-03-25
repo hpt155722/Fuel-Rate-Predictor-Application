@@ -1,34 +1,51 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Fill delivery address with user info
-    function getUserInfoFromSession() {
-        const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-        return loggedInUser;
+$(document).ready(function() {
+    // Function to fetch fuel quote history using AJAX
+    function fetchFuelQuoteForm() {
+        $.ajax({
+            url: '/fuelquoteform', 
+            type: 'GET',
+            success: function(data) {
+                data.forEach(function(quote) {
+                    var row = '<tr><td>' + quote.date + '</td><td>' + quote.gallonsRequested + '</td><td>' + quote.suggestedPrice + '</td><td>' + quote.totalAmountDue + '</td></tr>';
+                    $('#fuelQuoteTableBody').append(row);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching fuel quote history:', error);
+            }
+        });
     }
-
-    function populateFormWithUserInfo(user) {
-        document.getElementById('deliveryAddress').value = user.address1; 
-    }
-
-    const userInfo = getUserInfoFromSession();
-    if (userInfo) {
-        populateFormWithUserInfo(userInfo);
-    }
-
-    // Form submission
-    document.getElementById('fuelQuoteForm').addEventListener('submit', function(event) {
+    fetchFuelQuoteForm();
+    
+    // Listen for form submission
+    $('#fuelQuoteForm').submit(function(event) {
         event.preventDefault();
+
+        const userInfo = JSON.parse(sessionStorage.getItem('loggedInUser'));
 
         // Gather form data
         const formData = {
             username: userInfo.username,
-            gallonsRequested: parseFloat(document.getElementById('gallonsRequested').value),
-            deliveryAddress: document.getElementById('deliveryAddress').value,
-            deliveryDate: document.getElementById('deliveryDate').value,
-            suggestedPricePerGallon: parseFloat(document.getElementById('suggestedPrice').value),
-            totalAmountDue: parseFloat(document.getElementById('totalAmountDue').value)
+            gallonsRequested: parseFloat($('#gallonsRequested').val()),
+            deliveryAddress: $('#deliveryAddress').val(),
+            deliveryDate: $('#deliveryDate').val(),
+            suggestedPricePerGallon: parseFloat($('#suggestedPrice').val()),
+            totalAmountDue: parseFloat($('#totalAmountDue').val())
         };
 
-        // Append form data to fuelquotehistory.json here 
+        // AJAX POST request to send form data to the server
+        $.ajax({
+            url: '/updatefuelquotehistory', // Make sure this endpoint is set up on your server
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                console.log('Fuel quote form submitted successfully', response);
+                // Optionally, refresh the page or display a success message
+            },
+            error: function(xhr, status, error) {
+                console.error('Error submitting fuel quote form:', error);
+            }
+        });
     });
-
 });

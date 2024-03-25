@@ -1,9 +1,24 @@
 const express = require('express');
+const session = require('express-session');
 const fs = require('fs');
 const app = express();
 const PORT = 5500;
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
+
+app.use(session({
+  secret: 'key that will sign cookie',
+  resave: false,
+  saveUninitialized: false
+}));
+
+// Authentication middleware
+const requireLogin = (req, res, next) => {
+  if (!req.session.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+  }
+  next();
+};
 
 //Access fuel quote history JSON file
 app.get('/fuelquotehistory', (req, res) => {
@@ -16,6 +31,20 @@ app.get('/fuelquotehistory', (req, res) => {
         }
         const fuelQuotes = JSON.parse(data);
         res.json(fuelQuotes);
+    });
+});
+
+// Access users JSON file
+app.get('/users', (req, res) => {
+    console.log('Recieved request');
+    fs.readFile('users.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading users.JSON: ', err);
+            res.status(500).send('Error reading JSON file');
+            return;
+        }
+        const users = JSON.parse(data);
+        res.json(users);
     });
 });
 
@@ -82,6 +111,45 @@ app.post('/initial_register', (req, res) => {
     });
 });
 
+// Second registration handler
+app.post('/registration', (req, res) => {
+    const { username, password, fullName, address1, address2, city, state, zipcode } = req.body;
+    fs.readFile('users.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading users.JSON: ', err);
+            res.status(500).send('Error reading JSON file');
+            return;
+        }
+
+        try {
+            let currentData = JSON.parse(data);
+            const userToRegister = currentData.findIndex(user => user.username === username);
+            if (userToRegister != -1) {
+                currentData.splice(userToRegister, 1);
+                currentData.push({
+                    username, password, fullName, address1, address2, city, state, zipcode
+                })
+                fs.writeFile('users.json', JSON.stringify(currentData, null, 2), (writeErr) => {
+                    if (writeErr) {
+                        console.error('Error writing to users.json: ', writeErr);
+                        res.status(500).send('Error writing to JSON file');
+                        return;
+                    }
+                    console.log('User data updated successfully');
+                    res.json({ success: true, message: 'User data updated successfully' });
+                });
+            } else {
+                console.error("Username not found");
+                res.status(404).json({ success: false, message: 'Username not found'});
+            }
+        } catch (parseError) {
+            console.error('Error parsing JSON:', parseError);
+            res.status(500).send('Error parsing JSON');
+        }
+    });
+});
+
+
 app.post('/fuelquoteform', (req, res) => {
     const formData = req.body; 
 
@@ -98,6 +166,22 @@ app.post('/fuelquoteform', (req, res) => {
         console.error('Error handling fuel quote form submission:', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
+});
+
+// Logout route
+app.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+      if (err) {
+          console.error('Error destroying session:', err);
+          return res.status(500).json({ message: 'Internal server error' });
+      }
+      res.json({ success: true, message: 'Logged out successfully' });
+  });
+});
+
+// Protected route that requires login
+app.get('/protected', requireLogin, (req, res) => {
+  res.json({ message: 'You have access to protected data' });
 });
 
 //Serve static files from the 'public' directory (where our HTML, CSS, Javascript files are)
