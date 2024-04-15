@@ -1,30 +1,14 @@
 [
   {
     "username": "john_doe",
-    "password": "password123",
-    "fullName": "John Doe",
-    "address1": "123 Example Address blah blah St",
-    "address2": "Apt 101",
-    "city": "Katy",
-    "state": "TX",
-    "zipcode": "12345"
+    "password": "$2b$10$2KCMjxDc7oQkX.Dz8BrZ3uNKEhbT/BSgGdBsoNAvnkzW9/VGFUx5y"
   },
   {
     "username": "jane_smith",
-    "password": "ilovecookies",
-    "fullName": "Jane Smith",
-    "address1": "248 Example address blah blah St",
-    "address2": "",
-    "city": "Houston",
-    "state": "TX",
-    "zipcode": "77034"
+    "password": "$2b$10$nd1bmDS3dJ48qSzGmYPBW.kvUs5IcAx8ZLqy96hXF.kswQ6Lh6cyG"
   },
   {
-    "username": "jinnha",
-    "password": "123"
-  },
-  {
-    "username": "hello",
-    "password": "itisme"
+    "username": "username",
+    "password": "$2b$10$AUBPwTsosV7EvI0IgcQ3F.fTXiE6Dr6y.LNayh5IJX1U0GGKK9PrC"
   }
 ]

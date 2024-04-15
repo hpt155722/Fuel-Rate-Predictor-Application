@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const bcrypt = require('bcrypt');
 const fs = require('fs');
 const app = express();
 const PORT = 5500;
@@ -35,9 +36,9 @@ app.get('/fuelquotehistory', (req, res) => {
 });
 
 // Access users JSON file
-app.get('/users', (req, res) => {
+app.get('/profiles', (req, res) => {
     console.log('Recieved request');
-    fs.readFile('users.json', 'utf8', (err, data) => {
+    fs.readFile('profiles.json', 'utf8', (err, data) => {
         if (err) {
             console.error('Error reading users.JSON: ', err);
             res.status(500).send('Error reading JSON file');
@@ -50,88 +51,141 @@ app.get('/users', (req, res) => {
 
 // route to handle login requests
 app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    fs.readFile('users.json', 'utf8', (err, data) => {
-        if (err) {
-            res.status(500).json({ success: false, message: 'Error reading user data' });
-            return;
-        }
-        let userData = JSON.parse(data);
-        const user = userData.find(user => user.username === username && user.password === password);
-        if (!user) {
-            res.status(401).json({ success: false, message: 'Invalid username or password' });
-            return;
-        }
-        // login successful, send back user data including username and address
-        const { fullName, address1, address2, city, state, zipcode } = user;
-        res.json({ 
-            success: true, 
-            message: 'Login successful', 
-            user: { 
-                username, 
-                fullName, 
-                address1, 
-                address2, 
-                city, 
-                state, 
-                zipcode 
-            }, 
-            redirectTo: '/public/pages/home.html' 
-        });
-    });
+  const { username, password } = req.body;
+  fs.readFile('users.json', 'utf8', (err, data) => {
+      if (err) {
+          res.status(500).json({ success: false, message: 'Error reading user data' });
+          return;
+      }
+      let userData = JSON.parse(data);
+      const user = userData.find(user => user.username === username);
+      if (!user) {
+          res.status(401).json({ success: false, message: 'Invalid username or password' });
+          return;
+      }
+      // Compare hashed password
+      bcrypt.compare(password, user.password, (err, result) => {
+          if (err || !result) {
+              res.status(401).json({ success: false, message: 'Invalid username or password' });
+              return;
+          }
+          // Passwords match, login successful
+          const { username, fullName, address1, address2, city, state, zipcode } = user;
+          res.json({ 
+              success: true, 
+              message: 'Login successful', 
+              user: { 
+                  username, 
+                  fullName, 
+                  address1, 
+                  address2, 
+                  city, 
+                  state, 
+                  zipcode 
+              }, 
+              redirectTo: '/public/pages/home.html' 
+          });
+      });
+  });
 });
-
 
 // route to handle initial register requests
 app.post('/initial_register', (req, res) => {
     const { username, password } = req.body;
-    // read existing user data form users.json
+    //hash password
+    bcrypt.hash(password, 10, (err, hashedPassword) => {
+      if (err) {
+        console.error('Error hashing password:', err);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+        return;
+      }
+      // read existing user data form users.json
     fs.readFile('users.json', 'utf8', (err, data) => {
-        if (err) {
-            res.status(500).json({ success: false, message: 'Error reading user data' });
-            return;
-        }
-        let userData = JSON.parse(data);
-        // check if the username already exists
-        if(userData.find(user => user.username === username)){
-            res.status(400).json({ success: false, message: 'Username already exists'});
-            return;
-        }
-        // add the new user to userData
-        userData.push({ username, password});
-        // write the updated user data back to users.json
-        fs.writeFile('users.json', JSON.stringify(userData, null, 2), err => {
-            if (err) {
-                res.status(500).json({ success: false, message: 'Error writing user data'});
-                return;
-            }
-            // successful, redirect to the profile registration page
-            res.json({ success: true, message: 'User registered successfully', redirectTo: '/pubilc/pages/profile page/registration/registration.html' });
-        });
+      if (err) {
+          res.status(500).json({ success: false, message: 'Error reading user data' });
+          return;
+      }
+      let userData = JSON.parse(data);
+      // check if the username already exists
+      if(userData.find(user => user.username === username)){
+          res.status(400).json({ success: false, message: 'Username already exists'});
+          return;
+      }
+      // add the new user to userData
+      userData.push({ username, password: hashedPassword});
+      // write the updated user data back to users.json
+      fs.writeFile('users.json', JSON.stringify(userData, null, 2), err => {
+          if (err) {
+              res.status(500).json({ success: false, message: 'Error writing user data'});
+              return;
+          }
+          // successful, redirect to the profile registration page
+          res.json({ success: true, message: 'User registered successfully', redirectTo: '/pubilc/pages/profile page/registration/registration.html' });
+      });
     });
+  });
 });
 
 // Second registration handler
 app.post('/registration', (req, res) => {
-    const { username, password, fullName, address1, address2, city, state, zipcode } = req.body;
-    fs.readFile('users.json', 'utf8', (err, data) => {
+    const { username, fullName, address1, address2, city, state, zipcode, history } = req.body;
+    fs.readFile('profiles.json', 'utf8', (err, data) => {
         if (err) {
-            console.error('Error reading users.JSON: ', err);
+            console.error('Error reading profiles.json:', err);
             res.status(500).send('Error reading JSON file');
             return;
         }
 
         try {
             let currentData = JSON.parse(data);
+            // Check if the username already exists
+            const existingUser = currentData.find(user => user.username === username);
+            if (existingUser) {
+                console.error('Username already exists');
+                return res.status(400).json({ success: false, message: 'Username already exists' });
+            }
+
+            // Add the new user to userData
+            currentData.push({
+                username, fullName, address1, address2, city, state, zipcode, history
+            });
+
+            // Write the updated user data back to profiles.json
+            fs.writeFile('profiles.json', JSON.stringify(currentData, null, 2), (writeErr) => {
+                if (writeErr) {
+                    console.error('Error writing to profiles.json:', writeErr);
+                    return res.status(500).send('Error writing to JSON file');
+                }
+                console.log('User data updated successfully');
+                return res.json({ success: true, message: 'User data updated successfully' });
+            });
+        } catch (parseError) {
+            console.error('Error parsing JSON:', parseError);
+            res.status(500).send('Error parsing JSON');
+        }
+    });
+});
+
+
+app.post('/updateHistory', (req, res) => {
+    const { username, fullName, address1, address2, city, state, zipcode, history } = req.body;
+    fs.readFile('profiles.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading users.JSON: ', err);
+            res.status(500).send('Error reading JSON file');
+            return;
+        }
+        try {
+            let currentData = JSON.parse(data);
             const userToRegister = currentData.findIndex(user => user.username === username);
             if (userToRegister != -1) {
                 currentData.splice(userToRegister, 1);
                 currentData.push({
-                    username, password, fullName, address1, address2, city, state, zipcode
+                    username, fullName, address1, address2, city, state, zipcode, history
                 })
-                fs.writeFile('users.json', JSON.stringify(currentData, null, 2), (writeErr) => {
+                fs.writeFile('profiles.json', JSON.stringify(currentData, null, 2), (writeErr) => {
                     if (writeErr) {
-                        console.error('Error writing to users.json: ', writeErr);
+                        console.error('Error writing to profiles.json: ', writeErr);
                         res.status(500).send('Error writing to JSON file');
                         return;
                     }
@@ -147,25 +201,6 @@ app.post('/registration', (req, res) => {
             res.status(500).send('Error parsing JSON');
         }
     });
-});
-
-
-app.post('/fuelquoteform', (req, res) => {
-    const formData = req.body; 
-
-    function handleFuelQuoteFormSubmission(formData) {
-
-        console.log('Received fuel quote form submission:', formData);
-        return { success: true, message: 'Fuel quote submitted successfully' };
-    }
-
-    try {
-        const result = handleFuelQuoteFormSubmission(formData);
-        res.status(200).json(result);
-    } catch (error) {
-        console.error('Error handling fuel quote form submission:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
-    }
 });
 
 // Logout route
