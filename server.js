@@ -21,19 +21,6 @@ const requireLogin = (req, res, next) => {
   next();
 };
 
-//Access fuel quote history JSON file
-app.get('/fuelquotehistory', (req, res) => {
-    console.log('Received request to /fuelquotehistory endpoint');
-    fs.readFile('fuelquotehistory.json', 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading JSON file:', err);
-            res.status(500).send("Error reading JSON file");
-            return;
-        }
-        const fuelQuotes = JSON.parse(data);
-        res.json(fuelQuotes);
-    });
-});
 
 // Access users JSON file
 app.get('/profiles', (req, res) => {

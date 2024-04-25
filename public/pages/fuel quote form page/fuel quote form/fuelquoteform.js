@@ -36,7 +36,7 @@ function getQuote(userData) {
     }
     const priceModule = (1.50 * (statePrice - historyPrice + 0.1 + gallonDiscount));
     document.getElementById("suggestedPrice").value = priceModule + 1.50;
-    document.getElementById("totalAmountDue").value = (priceModule + 1.50) * gallons;
+    document.getElementById("totalAmountDue").value = ((priceModule + 1.50) * gallons).toFixed(2);
 }
 
 function submitForm(userData) {
@@ -45,6 +45,7 @@ function submitForm(userData) {
         {
             gallonsRequested: document.getElementById("gallonsRequested").value,
             deliveryDate: document.getElementById("deliveryDate").value,
+            suggestedPricePerGallon: document.getElementById("suggestedPrice").value,
             totalAmountDue: document.getElementById("totalAmountDue").value
         }
     )
@@ -70,43 +71,58 @@ function submitForm(userData) {
     });
 }
 
+function populate(userData) {
+     // Select the form
+     const address1 = document.getElementById("address1");
+     address1.value = userData.address1;
+     const address2 = document.getElementById("address2");
+     address2.value = userData.address2;
+     const state = document.getElementById("state");
+     state.value = userData.state;
+     const getQuoteButton = document.getElementById("getQuote");
+     getQuoteButton.onclick = function () {
+         getQuote(userData);
+     }
+     const submitButton = document.getElementById("submit");
+     submitButton.onclick = function () {
+         submitForm(userData);
+     }
+}
+
 populateTable()
     .then(userData => {
-        // Select the form
-        const address1 = document.getElementById("address1");
-        address1.value = userData.address1;
-        const address2 = document.getElementById("address2");
-        address2.value = userData.address2;
-        const getQuoteButton = document.getElementById("getQuote");
-        getQuoteButton.onclick = function () {
-            getQuote(userData);
-        }
-        const submitButton = document.getElementById("submit");
-        submitButton.onclick = function () {
-            submitForm(userData);
-        }
+       populate(userData);
     })
     .catch(error => {
         console.error("Error: ", error);
     });
 
 // Function to check if Gallons Requested and Delivery Date fields are empty
+/*
 function checkFormEmpty() {
-    return $('#gallonsRequested').val() === '' || $('#deliveryDate').val() === '';
+    return document.getElementById('gallonsRequested').value === '' || document.getElementById('deliveryDate').value === '';
 }
 
 
+// Hide buttons if form fields are empty
 if (checkFormEmpty()) {
-    $('#getQuote, #submit').hide();
+    document.getElementById('getQuote').style.display = 'none';
+    document.getElementById('submit').style.display = 'none';
 }
 
 // Show/hide buttons based on form input
-$('form input[type="number"], form input[type="date"]').on('input', function() {
-    if (checkFormEmpty()) {
-        $('#getQuote, #submit').hide();
-    } else {
-        $('#getQuote, #submit').show();
-    }
+document.querySelectorAll('form input[type="number"], form input[type="date"]').forEach(function(input) {
+    input.addEventListener('input', function() {
+        if (checkFormEmpty()) {
+            document.getElementById('getQuote').style.display = 'none';
+            document.getElementById('submit').style.display = 'none';
+        } else {
+            document.getElementById('getQuote').style.display = 'inline-block';
+            document.getElementById('submit').style.display = 'inline-block';
+        }
+    });
 });
+*/
 
-module.exports = { populateTable, getQuote, submitForm };
+
+module.exports = { populateTable, getQuote, submitForm, populate };

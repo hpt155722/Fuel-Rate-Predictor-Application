@@ -20,6 +20,22 @@
     "history": []
   },
   {
+    "username": "jinnha",
+    "fullName": "Jinn Ha",
+    "address1": "Blah Blah St",
+    "address2": "",
+    "city": "Houston",
+    "state": "TX",
+    "zipcode": "77083",
+    "history": [
+      {
+        "gallonsRequested": "3",
+        "deliveryDate": "2024-04-30",
+        "totalAmountDue": "5.175000000000001"
+      }
+    ]
+  },
+  {
     "username": "john_doe",
     "fullName": "John Doe",
     "address1": "123 Example St",
@@ -29,44 +45,10 @@
     "zipcode": "12345",
     "history": [
       {
-        "gallonsRequested": "100",
-        "deliveryDate": "2024-03-15",
-        "totalAmountDue": "250"
-      },
-      {
-        "gallonsRequested": "150",
-        "deliveryDate": "2024-02-20",
-        "totalAmountDue": "367.5"
-      },
-      {
-        "gallonsRequested": "200",
-        "deliveryDate": "2024-02-22",
-        "totalAmountDue": "510"
-      },
-      {
-        "gallonsRequested": "9819778",
-        "deliveryDate": "2024-04-22",
-        "totalAmountDue": "16644523.71"
-      },
-      {
-        "gallonsRequested": "1500",
-        "deliveryDate": "2024-04-30",
-        "totalAmountDue": "2542.5"
-      },
-      {
-        "gallonsRequested": "",
-        "deliveryDate": "",
-        "totalAmountDue": "0"
-      },
-      {
-        "gallonsRequested": "",
-        "deliveryDate": "",
-        "totalAmountDue": "0"
-      },
-      {
-        "gallonsRequested": "4",
+        "gallonsRequested": "10",
         "deliveryDate": "2024-04-25",
-        "totalAmountDue": "6.84"
+        "suggestedPricePerGallon": "1.71",
+        "totalAmountDue": "17.10"
       }
     ]
   }
