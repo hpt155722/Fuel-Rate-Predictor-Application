@@ -36,6 +36,8 @@ A software application designed to predict fuel rates based on various criteria 
 • **Code Coverage:**  
 &nbsp;&nbsp;&nbsp;&nbsp;• The project includes 80% code coverage. Tests are conducted using Jest.
 
+<br>
+
 ### ☆ ──── Screenshots ──── ☆
 
  <div>
